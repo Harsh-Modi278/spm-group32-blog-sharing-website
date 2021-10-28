@@ -1,12 +1,21 @@
 
 # Blog Sharing Website (SPM Group-32)
 
+Under guidance of : Ami Pandat
+
 This is project created as a part of IT414 Software Project Management course project. 
 It is a website on which users can share their thoughts and ideas as blog posts, they can comment on existing blogs, up-vote and down-vote blogs depending on their liking, follow their favorite authors and many more functioanilities are there.
 
+# Group Members
+
+- Harsh Modi (201801029)
+- Nikhil Mehta (201801030)
+- Rohith Yamsani (201801079)
+
+
 ## Demo
 
-Backend: https://spm-group32-bsw.herokuapp.com/
+Backend: https://spm-group32-bsw.herokuapp.com/api
 
 ## Deployment
 
