@@ -72,10 +72,10 @@ if (process.env.NODE_ENV === "production") {
   console.log(process.env.NODE_ENV);
   // set static folder
   // location where index.html is located
-  app.use(express.static("client/build"));
+  // app.use(express.static("client/build"));
 
-  app.get("*", (req, res, next) => {
-    // location where index.html is located
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
+  // app.get("*", (req, res, next) => {
+  //   // location where index.html is located
+  //   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  // });
 }
