@@ -1,81 +1,81 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import NavBar from "./components/NavBar.jsx";
-import Home from "./components/Home.jsx";
-import BlogDetails from "./components/BlogDetails.jsx";
-import Login from "./components/Login.jsx";
-import Register from "./components/Register.jsx";
-import AdminLogin from "./components/AdminLogin.jsx";
-import Create from "./components/Create.jsx";
-import { UserContext } from "./UserContext.js";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// express related
+const express = require("express");
+const app = express();
+const adminRoutes = require("./routes/adminRoutes.js");
+const postsRoutes = require("./routes/postsRoutes.js");
+const indexRoutes = require("./routes/indexRoutes.js");
+const path = require("path");
+const morgan = require("morgan");
 
-function App() {
-  const email = JSON.parse(localStorage.getItem("token"))
-    ? JSON.parse(localStorage.getItem("token")).email
-    : null;
+// cors related
+const cors = require("cors");
 
-  const [user, setUser] = useState({ email: email || "", isAdmin: false });
+// dotenv related
+const dotenv = require("dotenv");
+dotenv.config({ path: "./.env", encoding: "utf-8" });
 
-  // equivalent to componentDidMount
-  useEffect(() => {
-    if (user.email) {
-      // if token is available in localStorage, try to check if admin access is available for this user
+// mongoose related
+const mongoose = require("mongoose");
+const User = require("./models/User.js");
+const Post = require("./models/Post.js");
+const Comment = require("./models/Comment.js");
 
-      const myInit = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `BEARER ${
-            JSON.parse(localStorage.getItem("token")).token
-          }`,
-        },
-        mode: "cors",
-        cache: "default",
-      };
+// bcrypt related
+const bcryptjs = require("bcryptjs");
 
-      fetch("/api/admin/login", myInit)
-        .then((res) => {
-          if (res.ok) return res.json();
-          else {
-            throw Error("Invalid admin key");
-          }
-          // return res.json();
-        })
-        .then((jsonRes) => {
-          if (jsonRes.msg === "You are already an admin") {
-            setUser({ ...user, isAdmin: true });
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
+// jwt related
+const jwt = require("jsonwebtoken");
 
-  return (
-    <Router>
-      <div className="App">
-        <UserContext.Provider value={{ user, setUser }}>
-          <NavBar />
-          <div className="content">
-            {/* {JSON.stringify(user)} */}
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/blogs" component={Home} />
-              <Route exact path="/admin/blogs" component={Home} />
-              <Route exact path="/admin/login" component={AdminLogin} />
-              <Route path="/create">
-                <Create />
-              </Route>
-              <Route path="/blogs/:id" component={BlogDetails}></Route>
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
-              <Route path="/admin/login" component={AdminLogin} />
-            </Switch>
-          </div>
-        </UserContext.Provider>
-      </div>
-    </Router>
-  );
+// passport related
+const passport = require("passport");
+require("./config/passport-config.js")(passport);
+
+// logging
+app.use(morgan("tiny")); // logging framework
+
+// connecting node.js app with database
+const dbURI = process.env.DBURI;
+mongoose
+  .connect(dbURI, { useUnifiedTopology: true, useNewUrlParser: true })
+  .then(() => {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+  })
+  .catch((err) => console.error({ err }));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// enable all cors requests
+app.use(cors());
+
+// logger middleware for all requests
+// app.use((req, res, next) => {
+//   console.log();
+//   console.log("New request made");
+//   console.log("method:", req.method);
+//   console.log("path:", req.path);
+//   console.log("req.body", req.body);
+//   console.log("req.params", req.params);
+//   // console.log("headers: ", req.headers);
+//   next();
+// });
+
+app.use("/api", indexRoutes);
+
+app.use("/api/posts", postsRoutes);
+
+app.use("/api/admin", adminRoutes);
+
+// serve static assets if in production
+if (process.env.NODE_ENV === "production") {
+  console.log(process.env.NODE_ENV);
+  // set static folder
+  // location where index.html is located
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res, next) => {
+    // location where index.html is located
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
 }
-
-export default App;
