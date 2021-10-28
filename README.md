@@ -15,7 +15,7 @@ It is a website on which users can share their thoughts and ideas as blog posts,
 
 ## Demo
 
-Backend: https://spm-group32-bsw.herokuapp.com/api
+Demo link: https://spm-group32-bsw.herokuapp.com
 
 ## Deployment
 
