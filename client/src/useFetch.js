@@ -29,7 +29,6 @@ const useFetch = (url) => {
     };
 
     // console.log(myInit);
-    console.log({ url });
     fetch(url, myInit)
       .then((res) => {
         // console.log(res);
@@ -40,8 +39,6 @@ const useFetch = (url) => {
         }
       })
       .then((jsonRes) => {
-        // console.log("here");
-        // console.log({ jsonRes });
         setIsPending(false);
         setData(jsonRes);
         setError(null);
