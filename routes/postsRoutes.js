@@ -19,21 +19,19 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 
 // controllers
-const {
-  postsIndex_get,
-  postId_get,
-  postsComment_post,
-} = require("../controllers/postsControllers.js");
+const articlecontroller = require("../controllers/postsControllers.js");
 
-// "/" = "/posts/"
-router.get("/", postsIndex_get);
+const multipart = require("connect-multiparty");
+const multipartWare = multipart();
 
-router.get("/:postId", postId_get);
+router.route("/articles").get(articlecontroller.getAll);
 
-router.post(
-  "/:postId/comments",
-  passport.authenticate("jwt", { session: false }),
-  postsComment_post
-);
+router.route("/article").post(multipartWare, articlecontroller.addArticle);
+
+router.route("/article/clap").post(articlecontroller.clapArticle);
+
+router.route("/article/comment").post(articlecontroller.commentArticle);
+
+router.route("/article/:id").get(articlecontroller.getArticle);
 
 module.exports = router;
