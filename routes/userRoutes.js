@@ -18,27 +18,19 @@ const jwt = require("jsonwebtoken");
 // passport related
 const passport = require("passport");
 
-// controllers
 const {
-  saveArticle,
-  addArticle,
-  getAll,
-  commentArticle,
-  getArticle,
-  clapArticle,
-} = require("../controllers/postsControllers.js");
+  getUser,
+  getUserProfile,
+  addUser,
+  followUser,
+} = require("../controllers/userController.js");
 
-const multipart = require("connect-multiparty");
-const multipartWare = multipart();
+router.route("/:id").get(getUser);
 
-router.route("/").get(getAll);
+router.route("/profile/:id").get(getUserProfile);
 
-router.route("/").post(multipartWare, addArticle);
+router.route("/").post(addUser);
 
-router.route("/clap").post(clapArticle);
-
-router.route("/comment").post(commentArticle);
-
-router.route("/:id").get(getArticle);
+router.route("/follow").post(followUser);
 
 module.exports = router;
