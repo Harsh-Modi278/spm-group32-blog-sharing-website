@@ -19,19 +19,26 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 
 // controllers
-const articlecontroller = require("../controllers/postsControllers.js");
+const {
+  saveArticle,
+  addArticle,
+  getAll,
+  commentArticle,
+  getArticle,
+  clapArticle,
+} = require("../controllers/postsControllers.js");
 
 const multipart = require("connect-multiparty");
 const multipartWare = multipart();
 
-router.route("/").get(articlecontroller.getAll);
+router.route("/").get(getAll);
 
-router.route("/").post(multipartWare, articlecontroller.addArticle);
+router.route("/").post(multipartWare, addArticle);
 
-router.route("/clap").post(articlecontroller.clapArticle);
+router.route("/clap").post(clapArticle);
 
-router.route("/comment").post(articlecontroller.commentArticle);
+router.route("/comment").post(commentArticle);
 
-router.route("/:id").get(articlecontroller.getArticle);
+router.route("/:id").get(getArticle);
 
 module.exports = router;
