@@ -20,10 +20,10 @@ const passport = require("passport");
 
 const userController = require("../controllers/userController.js");
 
-router.route("/user/:id").get(usercontroller.getUser);
+router.route("/:id").get(usercontroller.getUser);
 
-router.route("/user/profile/:id").get(usercontroller.getUserProfile);
+router.route("/profile/:id").get(usercontroller.getUserProfile);
 
-router.route("/user").post(usercontroller.addUser);
+router.route("/").post(usercontroller.addUser);
 
-router.route("/user/follow").post(usercontroller.followUser);
+router.route("/follow").post(usercontroller.followUser);

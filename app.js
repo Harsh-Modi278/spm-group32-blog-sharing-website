@@ -1,11 +1,13 @@
 // express related
 const express = require("express");
 const app = express();
-const adminRoutes = require("./routes/adminRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
 const postsRoutes = require("./routes/postsRoutes.js");
 const indexRoutes = require("./routes/indexRoutes.js");
 const path = require("path");
 const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const helmet = require("helmet");
 
 // cors related
 const cors = require("cors");
@@ -49,6 +51,10 @@ app.use(express.json());
 // enable all cors requests
 app.use(cors());
 
+// middleware
+app.use(bodyParser.json());
+app.use(helmet());
+
 // logger middleware for all requests
 // app.use((req, res, next) => {
 //   console.log();
@@ -65,7 +71,7 @@ app.use("/api", indexRoutes);
 
 app.use("/api/posts", postsRoutes);
 
-app.use("/api/admin", adminRoutes);
+app.use("/api/user", userRoutes);
 
 // serve static assets if in production
 if (process.env.NODE_ENV === "production") {
